@@ -16,21 +16,14 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;700&display=swap");
 
 #app {
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   color: #2c3e50;
   padding: 24px;
   box-sizing: border-box;
 }
-
-html,
-body,
-#app {
-  height: 100%;
-}
-
 * {
   box-sizing: border-box;
 }

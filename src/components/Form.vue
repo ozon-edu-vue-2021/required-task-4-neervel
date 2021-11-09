@@ -1,207 +1,233 @@
 <template>
   <div class="form">
-    <form
-    >
+    <form @submit.prevent="sendData">
       <h3 class="form-title">Личныe данные</h3>
       <div class="row secondName">
         <label for="secondName">Фамилия</label>
-        <input 
-          id="secondName" 
+        <input
+          id="secondName"
           v-model="formData.secondName"
           required
-        >
+          v-mask="'ЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'"
+        />
       </div>
       <div class="row name">
         <label for="name">Имя</label>
-        <input 
-          id="name" 
+        <input
+          id="name"
           v-model="formData.name"
           required
-        >
+          v-mask="'ЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'"
+        />
       </div>
       <div class="row fatherName">
         <label for="fatherName">Отчество</label>
-        <input 
-          id="fatherName" 
+        <input
+          id="fatherName"
           v-model="formData.fatherName"
-        >
+          v-mask="'ЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'"
+        />
       </div>
       <div class="row birthDate">
         <label for="birthDate">Дата рождения</label>
-        <input 
-          id="birthDate" 
+        <input
+          id="birthDate"
           v-model="formData.birthDate"
           required
           placeholder="дд.мм.гггг"
           v-mask="'##.##.####'"
-        >
+        />
       </div>
       <div class="row email">
         <label for="email">E-mail</label>
-        <input 
-          id="email" 
-          v-model="formData.email"
-          required
-          type="email"
-        >
+        <input id="email" v-model="formData.email" required type="email" />
       </div>
       <div class="row sex">
         <span class="input-title">Пол</span>
         <div class="input-group">
-          <input 
+          <input
             type="radio"
             id="sexM"
             name="sex"
             value="Мужской"
             v-model="formData.sex"
-          >
+          />
           <label for="sexM">Мужской</label>
         </div>
         <div class="input-group">
-          <input 
+          <input
             type="radio"
             id="sexF"
             name="sex"
             value="Женский"
             v-model="formData.sex"
-          >
+          />
           <label for="sexF">Женский</label>
         </div>
       </div>
       <h3 class="form-title">Паспортные данные</h3>
-      <div class="row passport">
-        <label for="passport">Паспорт</label>
-        <input 
-          id="passport" 
-          v-model="formData.passport"
-          required
-          type="passport"
-        >
+      <div class="row citizen" v-click-outside="closeSitizenList">
+        <label for="citizen">Гражданство</label>
+        <input
+          id="citizen"
+          v-model="searchWord"
+          @click="isSitizenListOpen = true"
+        />
+        <ul class="citizen-list" v-if="isSitizenListOpen">
+          <li
+            v-for="citizenship in allCitizens"
+            :value="citizenship.nationality"
+            :key="citizenship.id"
+            @click="onCitizenClick(citizenship)"
+          >
+            {{ citizenship.nationality }}
+          </li>
+        </ul>
       </div>
-      <div class="russianPassport">
+      <div class="russianPassport" v-if="formData.citizen === 'Russia'">
         <div class="row">
           <label for="passportSeria">Серия паспорта</label>
-          <input 
-            id="passportSeria" 
+          <input
+            id="passportSeria"
             v-model="formData.passportSeria"
             required
-            type="passportSeria"
             v-mask="'####'"
-          >
+          />
         </div>
         <div class="row">
           <label for="passportNumber">Номер паспорта</label>
-          <input 
-            id="passportNumber" 
+          <input
+            id="passportNumber"
             v-model="formData.passportNumber"
             required
-            type="passportNumber"
             v-mask="'######'"
-          >
+          />
         </div>
         <div class="row">
           <label for="passportDate">Дата выдачи паспорта</label>
-          <input 
-            id="passportDate" 
+          <input
+            id="passportDate"
             v-model="formData.passportDate"
             required
             placeholder="дд.мм.гггг"
             v-mask="'##.##.####'"
-          >
+          />
         </div>
       </div>
-      <div class="abroadPassport">
+      <div
+        v-else-if="formData.citizen !== 'Russia' && formData.citizen"
+        class="abroadPassport"
+      >
         <div class="row latSecondName">
           <label for="latSecondName">Фамилия на латинице</label>
-          <input 
-            id="latSecondName" 
+          <input
+            id="latSecondName"
             v-model="formData.latSecondName"
             required
-          >
+            v-mask="'AAAAAAAAAAAAAAAAAAAAAAAAA'"
+          />
         </div>
         <div class="row latName">
           <label for="latName">Имя на латинице</label>
-          <input 
-            id="latName" 
+          <input
+            id="latName"
             v-model="formData.latName"
             required
-          >
+            v-mask="'AAAAAAAAAAAAAAAAAAAAAAAAA'"
+          />
         </div>
-        <div class="form-text">Иностранцы заполняют латинскими буквами. Например, Ivanov Ivan</div>
+        <div class="form-text">
+          Иностранцы заполняют латинскими буквами. Например, Ivanov Ivan
+        </div>
         <div class="row abroadPassportNumber">
           <label for="abroadPassportNumber">Номер паспорта</label>
-          <input 
-            id="abroadPassportNumber" 
+          <input
+            id="abroadPassportNumber"
             v-model="formData.abroadPassportNumber"
             required
-            type="abroadPassportNumber"
-          >
+          />
         </div>
         <div class="row abroadPassportCountry">
           <label for="abroadPassportCountry">Страна выдачи</label>
-          <input 
-            id="abroadPassportCountry" 
+          <input
+            id="abroadPassportCountry"
             v-model="formData.abroadPassportCountry"
             required
             type="abroadPassportCountry"
-          >
+          />
         </div>
         <div class="row abroadPassportType">
           <label for="abroadPassportType">Тип паспорта</label>
-          <input 
-            id="abroadPassportType" 
+          <select
+            id="abroadPassportType"
             v-model="formData.abroadPassportType"
             required
           >
+            <option
+              :value="passport.type"
+              v-for="passport in passportTypes"
+              :key="passport.id"
+            >
+              {{ passport.type }}
+            </option>
+          </select>
         </div>
       </div>
       <div class="row isSecondNameWasChanged">
         <span class="input-title">Меняли ли фамилию или имя?</span>
         <div class="input-group">
-          <input 
+          <input
             type="radio"
             id="isSecondNameWasChangedY"
             name="isSecondNameWasChanged"
-            value="false"
+            :value="false"
             v-model="formData.isSecondNameWasChanged"
-          >
+          />
           <label for="isSecondNameWasChangedY">Нет</label>
         </div>
         <div class="input-group">
-          <input 
+          <input
             type="radio"
             id="isSecondNameWasChangedM"
             name="isSecondNameWasChanged"
-            value="true"
+            :value="true"
             v-model="formData.isSecondNameWasChanged"
-          >
+          />
           <label for="isSecondNameWasChangedM">Да</label>
         </div>
       </div>
-      <div class="changeSecondName">
+      <div v-if="formData.isSecondNameWasChanged" class="changeSecondName">
         <div class="row oldSecondName">
           <label for="oldSecondName">Предыдущая Фамилия</label>
-          <input 
-            id="oldSecondName" 
+          <input
+            id="oldSecondName"
             v-model="formData.oldSecondName"
             required
-          >
+            v-mask="'ЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'"
+          />
         </div>
         <div class="row oldName">
           <label for="oldName">Предыдущее Имя</label>
-          <input 
-            id="oldName" 
+          <input
+            id="oldName"
             v-model="formData.oldName"
             required
-          >
+            v-mask="'ЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'"
+          />
         </div>
+      </div>
+      <div class="row submit">
+        <button class="btn">Отправить</button>
       </div>
     </form>
   </div>
 </template>
 
 <script>
-import { VueMaskDirective } from "v-mask";
+import citizens from "../assets/data/citizenships.json";
+import passportTypes from "../assets/data/passport-types.json";
+import ClickOutside from "vue-click-outside";
+import { debounce } from "../helpres/debounce.js";
 
 export default {
   data() {
@@ -213,7 +239,7 @@ export default {
         birthDate: "",
         email: "",
         sex: "",
-        passport: "",
+        citizen: "",
         passportSeria: "",
         passportNumber: "",
         passportDate: "",
@@ -222,15 +248,65 @@ export default {
         abroadPassportNumber: "",
         abroadPassportCountry: "",
         abroadPassportType: "",
-        isSecondNameWasChanged: "",
+        isSecondNameWasChanged: false,
         oldSecondName: "",
         oldName: "",
-      }
+      },
+      allCitizens: citizens,
+      isSitizenListOpen: false,
+      searchWord: "",
+      debouncedSearchCitizens: null,
+      passportTypes: passportTypes,
     };
   },
-  methods: {},
+  created() {
+    this.debouncedSearchCitizens = debounce(this.getCitizens, 2000);
+  },
+  watch: {
+    searchWord(newValue) {
+      this.debouncedSearchCitizens(newValue);
+    },
+  },
+  methods: {
+    closeSitizenList() {
+      this.isSitizenListOpen = false;
+    },
+    onCitizenClick(citizen) {
+      this.formData.citizen = citizen.nationality;
+      this.searchWord = citizen.nationality;
+      this.closeSitizenList();
+    },
+    getCitizens(searchWord) {
+      console.log("FETCH SKILLS: GET SKILLS FROM API ", searchWord);
+      this.allCitizens = citizens.filter((citizen) =>
+        citizen.nationality.includes(searchWord)
+      );
+    },
+    sendData() {
+      if (this.checkDate()) {
+        console.log(JSON.stringify(this.formData));
+      } else {
+        document.getElementById("birthDate").classList.add("error");
+        console.log("error");
+      }
+    },
+    checkDate() {
+      let birthDate = new Date(
+        +this.dateArray[2],
+        this.dateArray[1] - 1,
+        +this.dateArray[0]
+      );
+      let nowDate = new Date();
+      return nowDate > birthDate ? 1 : 0;
+    },
+  },
   directives: {
-    mask: VueMaskDirective,
+    ClickOutside,
+  },
+  computed: {
+    dateArray() {
+      return this.formData.birthDate.split(".");
+    },
   },
 };
 </script>
@@ -238,6 +314,8 @@ export default {
 <style scoped>
 .form {
   margin: 50px 0;
+  display: flex;
+  justify-content: center;
 }
 label {
   display: block;
@@ -251,7 +329,7 @@ input {
   padding: 0 10px;
   border-radius: 3px;
   border: 2px solid #d9dfe4;
-  transition: .2s;
+  transition: 0.2s;
   width: 100%;
 }
 input[type="radio"] {
@@ -261,7 +339,10 @@ input:focus {
   outline: none;
   border-color: #2459f5;
 }
-.form form{
+input.error {
+  border-color: red;
+}
+.form form {
   display: grid;
   grid-template-columns: repeat(6, 100px);
   row-gap: 20px;
@@ -302,8 +383,27 @@ input:focus {
 .input-title {
   display: block;
 }
-.passport {
+.citizen {
   grid-column: 1/4;
+  position: relative;
+}
+.citizen-list {
+  position: absolute;
+  top: 50px;
+  list-style: none;
+  padding: 10px;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 3px;
+  border: 1px solid gray;
+}
+.citizen-list li {
+  cursor: pointer;
+  margin: 5px 0;
+  display: block;
+}
+.citizen-list li:hover {
+  color: #000;
 }
 .russianPassport {
   grid-column: 1/7;
@@ -346,5 +446,20 @@ input:focus {
   grid-template-columns: 1fr 1fr;
   row-gap: 20px;
   column-gap: 20px;
+}
+.submit {
+  grid-column: 1/7;
+}
+button {
+  padding: 15px 40px;
+  color: #fff;
+  background-color: #2459f6;
+  border: none;
+  border-radius: 3px;
+  font-weight: 500;
+  display: block;
+  margin-left: auto;
+  margin-right: 0;
+  cursor: pointer;
 }
 </style>
