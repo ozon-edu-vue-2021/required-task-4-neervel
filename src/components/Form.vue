@@ -260,7 +260,7 @@ export default {
     };
   },
   created() {
-    this.debouncedSearchCitizens = debounce(this.getCitizens, 2000);
+    this.debouncedSearchCitizens = debounce(this.getCitizens, 1000);
   },
   watch: {
     searchWord(newValue) {
@@ -461,5 +461,12 @@ button {
   margin-left: auto;
   margin-right: 0;
   cursor: pointer;
+}
+select {
+  height: 40px;
+  padding: 0 10px;
+  border-radius: 3px;
+  border: 2px solid #d9dfe4;
+  background-color: transparent;
 }
 </style>
