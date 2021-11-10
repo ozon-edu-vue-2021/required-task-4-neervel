@@ -469,4 +469,19 @@ select {
   border: 2px solid #d9dfe4;
   background-color: transparent;
 }
+
+@media screen and (max-width: 768px) {
+  .form form {
+    grid-template-columns: repeat(1, 350px);
+  }
+  .row {
+    grid-column: 1/7 !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .form form {
+    grid-template-columns: repeat(1, 200px);
+  }
+}
 </style>
